@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+# PYTHON_ARGCOMPLETE_OK
+"""
+assist: Command Line Script
+===========================
+
+To see usage run "assist -h".
+
+Author: [Manuel Lopez](http://jmlopez-rod.github.io/)
+        [Chinmaya Gupta](http://math.uh.edu/~chinmaya/)
+Contact: jmlopez.rod@gmail.com
+Copyright 2013 Jose Manuel Lopez
+
+"""
+
+if __name__ == '__main__':
+    from assist.__main__ import run
+    run()

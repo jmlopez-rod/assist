@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating a Model &mdash; assist 0.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="assist 0.0.1 documentation" href="index.html" />
+    <link rel="up" title="Getting Started" href="start.html" />
+    <link rel="prev" title="Getting Started" href="start.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="start.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">assist 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="start.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-a-model">
+<span id="make-model"></span><h1>Creating a Model<a class="headerlink" href="#creating-a-model" title="Permalink to this headline">¶</a></h1>
+<p>Assist currently provides templates to create two types of models:
+ssa and sde.</p>
+<div class="section" id="ssa-model">
+<h2>SSA Model<a class="headerlink" href="#ssa-model" title="Permalink to this headline">¶</a></h2>
+<p>To create an ssa model you need to provide the number of species as
+well as the number of reactions in the model. The next command creates
+a template to simulate the Lotka-Volterra model with two species and
+four events.</p>
+<div class="highlight-sh"><div class="highlight"><pre>assist mkmodel LotkaVolterra ssa --nspecs 2 --nreacs 4 -z row
+</pre></div>
+</div>
+<p>The extra option <tt class="docutils literal"><span class="pre">-z</span></tt> creates all the entries of the state change
+matrix. The value of <tt class="docutils literal"><span class="pre">row</span></tt> allows us to specify the changes on the
+species due to an event. In this case we can see a row number as the
+event number and as we move entry by entry we specify the change in
+an species. When <tt class="docutils literal"><span class="pre">-z</span></tt> is set to <tt class="docutils literal"><span class="pre">col</span></tt> then each row in the header
+file represents an specie. For instance, the command above produces</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/** LOTKAVOLTERRA_SSA.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * LOTKAVOLTERRA - Stochastic Simulation Algorithm</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: jmlopez</span>
+<span class="cm"> * Sat Aug 02, 2014 07:45:50 PM</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef LOTKAVOLTERRA_SSA_H</span>
+<span class="cp">#define LOTKAVOLTERRA_SSA_H</span>
+<span class="cp">#include &lt;assist/models/model_ssa.h&gt;</span>
+
+<span class="k">class</span> <span class="nc">LotkaVolterraSSA</span><span class="o">:</span> <span class="k">public</span> <span class="n">ModelSSA</span> <span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="cm">/* ModelSSA inheritance:</span>
+<span class="cm">        const char* name;</span>
+<span class="cm">        const int num_specs, num_reacs;</span>
+<span class="cm">        VECTOR x0, prop;</span>
+<span class="cm">        MATRIX_INT z; */</span>
+    <span class="c1">// @begin-properties</span>
+    <span class="c1">// @end-properties</span>
+    <span class="n">LotkaVolterraSSA</span><span class="p">()</span><span class="o">:</span>
+        <span class="n">ModelSSA</span><span class="p">(</span><span class="s">&quot;LotkaVolterraSSA&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">x0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">x0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="c1">// The element z(s, r) denotes the change</span>
+        <span class="c1">// to the species s due to the reaction r</span>
+        <span class="k">for</span><span class="p">(</span><span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">z</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>  <span class="n">z</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+        <span class="n">z</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>  <span class="n">z</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+        <span class="n">z</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>  <span class="n">z</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+        <span class="n">z</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>  <span class="n">z</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span>  <span class="mi">0</span><span class="p">;</span>
+
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;LotkaVolterraSSA() executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">eval_prop</span><span class="p">(</span><span class="k">const</span> <span class="n">VECTOR</span><span class="o">&amp;</span> <span class="n">sm</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">prop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">prop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">prop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="n">prop</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>We may now proceed to specify the specific characteristics of the
+model.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Creating a Model</a><ul>
+<li><a class="reference internal" href="#ssa-model">SSA Model</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="start.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/mkmodel.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="start.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="index.html">assist 0.0.1 documentation</a> &raquo;</li>
+          <li><a href="start.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Manuel Lopez, Chinmaya Gupta.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
