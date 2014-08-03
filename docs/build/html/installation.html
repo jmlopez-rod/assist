@@ -80,6 +80,24 @@ sudo python3 setup.py install
 <span class="pre">--user</span></tt>. See <a class="reference external" href="https://pypi.python.org/pypi/assist/">PyPI</a> for all
 available versions.</p>
 </div>
+<div class="section" id="assist-executable">
+<h2>ASSIsT executable<a class="headerlink" href="#assist-executable" title="Permalink to this headline">¶</a></h2>
+<p>To be able to call <tt class="docutils literal"><span class="pre">assist</span></tt> from the command line you must have
+the executable directory in your <tt class="docutils literal"><span class="pre">$PATH</span></tt>. This can be taken care
+of my calling the <tt class="docutils literal"><span class="pre">install</span></tt> command in <tt class="docutils literal"><span class="pre">assist</span></tt>. Since the
+executable is not yet available you will have to call python first.</p>
+<div class="highlight-sh"><div class="highlight"><pre>python3 -m assist install
+</pre></div>
+</div>
+<p>This will print several messages describing some paths. To verify
+that <tt class="docutils literal"><span class="pre">assist</span></tt> is now in your path you can try the help option</p>
+<div class="highlight-sh"><div class="highlight"><pre>assist -h
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">install</span></tt> command also takes care of the C and C++ include
+paths. This will make sure that you can include the header files
+containing the models, methods and collectors from this project.</p>
+</div>
 </div>
 
 
@@ -93,6 +111,7 @@ available versions.</p>
 <li><a class="reference internal" href="#">Installing ASSIsT</a><ul>
 <li><a class="reference internal" href="#the-easy-way">The Easy Way</a></li>
 <li><a class="reference internal" href="#installing-on-nix-systems">Installing on *nix Systems</a></li>
+<li><a class="reference internal" href="#assist-executable">ASSIsT executable</a></li>
 </ul>
 </li>
 </ul>

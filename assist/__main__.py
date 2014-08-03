@@ -55,7 +55,11 @@ version:
         argcomplete.autocomplete(argp)
     except NameError:
         pass
-    return argp.parse_args()
+    arg = argp.parse_args()
+    if arg.parser_name is None:
+        argp.print_usage()
+        argp.exit(2)
+    return arg
 
 
 def run():

@@ -40,3 +40,27 @@ number):
 The last command can be replaced by ``python3 setup.py install
 --user``. See `PyPI <https://pypi.python.org/pypi/assist/>`_ for all
 available versions.
+
+
+ASSIsT executable
+=================
+
+To be able to call ``assist`` from the command line you must have
+the executable directory in your ``$PATH``. This can be taken care
+of my calling the ``install`` command in ``assist``. Since the
+executable is not yet available you will have to call python first.
+
+.. code-block:: sh
+
+    python3 -m assist install
+
+This will print several messages describing some paths. To verify
+that ``assist`` is now in your path you can try the help option
+
+.. code-block:: sh
+
+    assist -h
+
+The ``install`` command also takes care of the C and C++ include
+paths. This will make sure that you can include the header files
+containing the models, methods and collectors from this project.
