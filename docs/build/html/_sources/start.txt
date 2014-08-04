@@ -14,3 +14,4 @@ following:
    :maxdepth: 2
 
     Creating a model <mkmodel>
+    Creating a method <mkmethod>

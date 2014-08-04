@@ -2,7 +2,7 @@
  * Manuel Lopez - jmlopez@math.uh.edu
  * Department of Mathematics,
  * University of Houston.
- * May 19, 2013 - Agust 2, 2014
+ * May 19, 2013 - August 3, 2014
  */
 
 #ifndef MODEL_SSA_H
