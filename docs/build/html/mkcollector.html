@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Creating a Data Collector &mdash; assist 0.0.1b4 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.1b4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="assist 0.0.1b4 documentation" href="index.html" />
+    <link rel="up" title="Getting Started" href="start.html" />
+    <link rel="prev" title="Creating a Method" href="mkmethod.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mkmethod.html" title="Creating a Method"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">assist 0.0.1b4 documentation</a> &raquo;</li>
+          <li><a href="start.html" accesskey="U">Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="creating-a-data-collector">
+<span id="make-collector"></span><h1>Creating a Data Collector<a class="headerlink" href="#creating-a-data-collector" title="Permalink to this headline">¶</a></h1>
+<p>To create a new method you can use the <tt class="docutils literal"><span class="pre">mkcollector</span></tt> command</p>
+<div class="highlight-sh"><div class="highlight"><pre>assist collector NewTimeSeries
+</pre></div>
+</div>
+<p>This will produce a template so that you may define the necessary
+definitions for the functions used during a simulation.</p>
+<div class="highlight-cpp"><div class="highlight"><pre><span class="cm">/** NEWTIMESERIES.h</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: jmlopez</span>
+<span class="cm"> * Mon Aug 04, 2014 11:37:05 PM</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef NEWTIMESERIES_H</span>
+<span class="cp">#define NEWTIMESERIES_H</span>
+
+<span class="cm">/* EXCENTURY REFERENCE:</span>
+<span class="cm">  VECTOR x methods:</span>
+<span class="cm">    x.dim() &lt;==&gt; x.size(): Number of elements</span>
+<span class="cm">    x[n] &lt;==&gt; x(n): access the nth entry</span>
+<span class="cm">  MATRIX x methods:</span>
+<span class="cm">    x.dim(0) &lt;==&gt; Number of rows</span>
+<span class="cm">    x.dim(1) &lt;==&gt; Number of columns</span>
+<span class="cm">    x(r, c) &lt;==&gt; x[r+c*x.dim(0)]</span>
+<span class="cm">    x.size(0) &lt;==&gt; x.dim(0)</span>
+<span class="cm">    x.size(1) &lt;==&gt; x.dim(0)*x.dim(2)</span>
+<span class="cm">*/</span>
+<span class="k">class</span> <span class="nc">NewTimeSeries</span> <span class="p">{</span>
+<span class="nl">private:</span>
+    <span class="kt">bool</span> <span class="n">complete</span><span class="p">;</span>
+    <span class="n">BaseMethod</span><span class="o">&amp;</span> <span class="n">sm</span><span class="p">;</span>
+    <span class="cm">/* BaseMethod properties:</span>
+<span class="cm">        const char* name;</span>
+<span class="cm">        double time, time_step;</span>
+<span class="cm">        VECTOR x, x_prev; */</span>
+<span class="nl">public:</span>
+    <span class="n">NewTimeSeries</span><span class="p">(</span><span class="n">BaseMethod</span><span class="o">&amp;</span> <span class="n">sm_</span><span class="p">)</span><span class="o">:</span> <span class="n">sm</span><span class="p">(</span><span class="n">sm_</span><span class="p">),</span> <span class="n">complete</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// Initialize your collector here</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries(METHOD:%s) executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sm</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">new_trial</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Reset variables if more than one trial is executed.</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries.new_trial() executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">process_info</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// This function should be called after the simulation</span>
+        <span class="c1">// method has updated the system.</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries.process_info() executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">end_trial</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Is there anything that needs to be done once the trial is</span>
+        <span class="c1">// done?</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries.end_trial() executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">end_sim</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// There might be code to write after the simulation is</span>
+        <span class="c1">// completed. Write it here</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries.end_sim() executed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="kt">bool</span> <span class="n">is_complete</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+        <span class="n">trace</span><span class="p">(</span><span class="s">&quot;NewTimeSeries.complete() executed: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+              <span class="p">(</span><span class="n">complete</span> <span class="o">?</span> <span class="s">&quot;true&quot;</span><span class="o">:</span> <span class="s">&quot;false&quot;</span><span class="p">));</span>
+        <span class="k">return</span> <span class="n">complete</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+<p>We may now proceed to specify the specific characteristics of the
+data collector.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="mkmethod.html"
+                        title="previous chapter">Creating a Method</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/mkcollector.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mkmethod.html" title="Creating a Method"
+             >previous</a> |</li>
+        <li><a href="index.html">assist 0.0.1b4 documentation</a> &raquo;</li>
+          <li><a href="start.html" >Getting Started</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Manuel Lopez, Chinmaya Gupta.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

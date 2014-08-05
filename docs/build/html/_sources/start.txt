@@ -15,3 +15,4 @@ following:
 
     Creating a model <mkmodel>
     Creating a method <mkmethod>
+    Creating a data collector <mkcollector>
