@@ -45,17 +45,16 @@ def source_assistrc():
         exit(2)
     disp('checking %s ... ' % bashrc_path)
     if pth.exists(bashrc_path):
-        with open(bashrc_path, 'r') as content_file:
-            text = content_file.read()
         expr = [
             'source ~/.assistrc\n',
             'source $HOME/.assistrc\n',
             pth.expandvars('source $HOME/.assistrc\n'),
         ]
-        for line in expr:
-            if line in text:
-                disp('ok\n')
-                return
+        for content_line in open(bashrc_path, 'r'):
+            for line in expr:
+                if line == content_line:
+                    disp('ok\n')
+                    return
     with open(bashrc_path, 'a') as content_file:
         disp('\n    including .assistrc\n')
         content_file.write('source ~/.assistrc\n')
